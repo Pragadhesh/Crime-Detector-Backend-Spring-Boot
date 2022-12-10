@@ -19,7 +19,7 @@ public class Transcripts {
 	@Column(name = "id")
 	private long id;
 
-	@Column(name = "filename",unique = true)
+	@Column(name = "filename")
 	private String filename;
 
 	@Column(name = "uploadurl")
@@ -29,8 +29,9 @@ public class Transcripts {
 	private String transcriptid;
 
 
-	public Transcripts(String filename, String uploadurl) {
+	public Transcripts(String filename, String uploadurl,String transcriptid) {
 		this.filename = filename;
 		this.uploadurl = uploadurl;
+		this.transcriptid = transcriptid;
 	}
 }
