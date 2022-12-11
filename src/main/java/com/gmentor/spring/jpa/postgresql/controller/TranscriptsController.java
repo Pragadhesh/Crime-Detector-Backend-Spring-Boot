@@ -23,6 +23,7 @@ public class TranscriptsController<Gson> {
 	private RestTemplate restTemplate;
 
 	String url = "https://api.assemblyai.com/v2/transcript";
+	String transcript_url = "https://api.assemblyai.com/v2/transcript/{transcriptid}";
 
 	@PostMapping("/register")
 	public ResponseEntity<Transcripts> createTranscript(@RequestBody Transcripts transcripts) {
@@ -37,6 +38,7 @@ public class TranscriptsController<Gson> {
 			body.put("summarization", true);
 			body.put("iab_categories", true);
 			body.put("auto_highlights",true);
+			body.put("sentiment_analysis",true);
 			
 			HttpEntity request = new HttpEntity(body.toString(),headers);
 			
@@ -70,7 +72,28 @@ public class TranscriptsController<Gson> {
 		}
 	}
 
-
+	@GetMapping("/transcripts/{transcriptid}")
+	public ResponseEntity<String> getTranscript(@PathVariable("transcriptid") String transcriptid)
+	{
+		try {
+			HttpHeaders headers = new HttpHeaders();
+			headers.setContentType(MediaType.APPLICATION_JSON);
+			headers.set("authorization", "485ffa2783fe4d80b818b28a1a50aa0d");
+			HttpEntity request = new HttpEntity(headers);
+			String response = restTemplate.exchange(
+					transcript_url,
+					HttpMethod.GET,
+					request,
+					String.class,
+					transcriptid
+			).getBody().toString();
+			return new ResponseEntity<>(response,HttpStatus.ACCEPTED);
+		}
+		catch (Exception e) {
+			System.out.println(e);
+			return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+	}
 
 
 
